@@ -30,7 +30,6 @@ def setUp():
         print(f'Current URL: {driver.current_url}, Page title: {driver.title}')
 
 
-
 def tearDown():
     if driver is not None:
         print(f'-------------------------~*~--------------------------')
@@ -79,7 +78,7 @@ def sign_up():
 def check_full_name():
     print(f'-------------------------~*~--------------------------')
     driver.find_element(By.ID, 'menuUser').click()
-    sleep(2.5)
+    sleep(0.5)
     driver.find_element(By.CSS_SELECTOR, 'div#loginMiniTitle > label[translate = "My_account"]').click()
     sleep(0.5)
     if driver.find_element(By.XPATH, f'//label[contains(., "{locators.full_name}")]').is_displayed():
@@ -138,20 +137,31 @@ def log_in():
 
 def delete_test_account():
     print(f'------------------DELETE---------------------')
-    driver.find_element(By.ID, 'menuUser').click()
-    sleep(2.5)
-    driver.find_element(By.XPATH, '//div[@id="loginMiniTitle"]/label[@translate="My_account"]').click()
-    sleep(1.5)
-    driver.find_element(By.XPATH, '//button[contains(., "Delete Account")]').click()
+    assert driver.find_element(By.ID, 'menuUserLink').is_displayed()
+    sleep(2)
+    driver.find_element(By.ID, 'menuUserLink').click()
     sleep(0.5)
-    # account validation
-    if driver.find_element(By.CSS_SELECTOR, 'div.deletePopupBtn.deleteRed').is_displayed():
-        driver.find_element(By.CSS_SELECTOR, 'div.deletePopupBtn.deleteRed').click()
-        sleep(3)
-        if driver.find_element(By.XPATH, '//span[contains(@class,"containMiniTitle")]').text == '':
-            print(f' user {locators.new_username} is deleted successfully')
-        else:
-            print(f' user {locators.new_username} is not deleted successfully')
+    driver.find_element(By.XPATH, '//*[@id="loginMiniTitle"]/label[contains(., "My account")]').click()
+    sleep(0.5)
+    driver.find_element(By.CLASS_NAME, 'deleteBtnText').click()
+    sleep(0.5)
+    driver.find_element(By.CSS_SELECTOR, 'div.deletePopupBtn.deleteRed').click()
+    sleep(1)
+    assert driver.find_element(By.ID, 'menuUserLink').is_displayed()
+    sleep(2.5)
+    driver.find_element(By.ID, 'menuUserLink').click()
+    sleep(1.5)
+    driver.find_element(By.NAME, 'username').send_keys(locators.new_username)
+    sleep(1.5)
+    driver.find_element(By.NAME, 'password').send_keys(locators.new_password)
+    sleep(1.5)
+    driver.find_element(By.ID, 'sign_in_btnundefined').click()
+    sleep(0.5)
+    if driver.find_element(By.ID, 'signInResultMessage').is_displayed():
+        print(f'incorrect username and password is displayed!')
+        print(f'---Test passed and account successfully deleted-----')
+    else:
+        print(f'Something went wrong.')
 
 
 # setUp()
