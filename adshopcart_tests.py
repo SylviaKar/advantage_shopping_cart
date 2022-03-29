@@ -14,4 +14,5 @@ class AdshopcartAppPositiveTestCases(unittest.TestCase):  # container for the te
         methods.log_out()
         methods.log_in()
         methods.delete_test_account()
+        methods.check_homepage()
         methods.tearDown()

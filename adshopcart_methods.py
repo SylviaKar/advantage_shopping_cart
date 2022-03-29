@@ -10,7 +10,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select  # <--- add this import for drop down lists
 from selenium.webdriver import Keys
 from selenium.webdriver.support import expected_conditions as EC
-#
+import time
+import random
 
 s = Service(executable_path='../chromedriver.exe')
 driver = webdriver.Chrome(service=s)
@@ -164,6 +165,51 @@ def delete_test_account():
         print(f'Something went wrong.')
 
 
+def check_homepage():
+    print(f'-----------------------------------------------------')
+    driver.get(locators.Advantage_Shopping_Cart_url)
+
+    check_list1 = ["SPEAKERS", "TABLETS", "LAPTOPS", "MICE", "HEADPHONES"]
+    for element in check_list1:
+        if driver.find_element(By.XPATH, f"//span[contains(., '{element}')]").is_displayed():
+            print(f"****'{element}' is displayed.****")
+        else:
+            print("'{element}' is not displayed on the homepage!")
+
+    check_list2 = ["SPECIAL OFFER", "POPULAR ITEMS", "CONTACT US"]
+    for item in check_list2:
+        if driver.find_element(By.XPATH, f'//a[contains(., "{item}")]').is_displayed():
+            sleep(0.5)
+            driver.find_element(By.XPATH, f'//a[contains(., "{item}")]').click()
+            sleep(1)
+            if driver.find_element(By.XPATH, f"//*[self::h1 or self::h3][contains(., '{item}')]").is_displayed():
+                sleep(0.5)
+                print(f'****{item} is displayed.****')
+            else:
+                print(f'{item} is not displayed.')
+
+        if driver.find_element(By.XPATH, '//span[contains(text(), "dvantage")]').is_displayed() and \
+                driver.find_element(By.XPATH, '//span[contains(text(), "DEMO")]').is_displayed():
+            print('*** The logo: dvantage and DEMO is successfully displayed. ***')
+        sleep(0.5)
+        Select(driver.find_element(By.NAME, 'categoryListboxContactUs')).select_by_index(1)
+        sleep(0.5)
+        Select(driver.find_element(By.NAME, 'productListboxContactUs')).select_by_index(1)
+        sleep(0.5)
+        driver.find_element(By.XPATH, '//input[@name="emailContactUs"]').send_keys(locators.email)
+        sleep(0.5)
+        driver.find_element(By.XPATH, '//textarea[@name="subjectTextareaContactUs"]').send_keys(locators.subject)
+        sleep(0.5)
+        assert driver.find_element(By.XPATH, '//button[@id = "send_btnundefined"]').is_enabled()
+        sleep(0.5)
+        driver.find_element(By.XPATH, '//button[@id = "send_btnundefined"]').click()
+        sleep(0.5)
+        if driver.find_element(By.XPATH, '//a[@class="a-button ng-binding"]').is_displayed():
+            print('Contact Us form is submitted and CONTINUE SHOPPING button is displayed')
+        sleep(0.5)
+        driver.find_element(By.XPATH, '//a[@class="a-button ng-binding"]').click()
+        sleep(0.5)
+
 # setUp()
 # sign_up()
 # check_full_name()
@@ -171,4 +217,5 @@ def delete_test_account():
 # log_out()
 # log_in()
 # delete_test_account()
+# check_homepage()
 # tearDown()
