@@ -6,12 +6,11 @@ from selenium import webdriver  # import selenium to the file
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 import adshopcart_locators as locators
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support.ui import Select  # <--- add this import for drop down lists
-from selenium.webdriver import Keys
-from selenium.webdriver.support import expected_conditions as EC
 import time
-import random
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support import expected_conditions as EC# <--- add this import for drop down lists
+from selenium.webdriver import Keys
 
 s = Service(executable_path='../chromedriver.exe')
 driver = webdriver.Chrome(service=s)
@@ -43,9 +42,9 @@ def tearDown():
 def sign_up():
     print(f'-------------------------~*~--------------------------')
     driver.find_element(By.ID, 'menuUser').click()
-    sleep(1.5)
-    driver.find_element(By.CSS_SELECTOR, 'a.create-new-account').click()
-    sleep(1.5)
+    sleep(2.5)
+    driver.find_element(By.LINK_TEXT, 'CREATE NEW ACCOUNT').click()
+    sleep(1.0)
     driver.find_element(By.NAME, 'usernameRegisterPage').send_keys(locators.new_username)
     sleep(0.5)
     driver.find_element(By.NAME, 'emailRegisterPage').send_keys(locators.email)
@@ -73,15 +72,15 @@ def sign_up():
     driver.find_element(By.NAME, 'i_agree').click()
     sleep(0.5)
     driver.find_element(By.ID, 'register_btnundefined').click()
-    sleep(0.5)
+    sleep(1)
     print(f'*** New account is successfully created. ***')
 
 def check_full_name():
     print(f'-------------------------~*~--------------------------')
     driver.find_element(By.ID, 'menuUser').click()
-    sleep(0.5)
+    sleep(2.5)
     driver.find_element(By.CSS_SELECTOR, 'div#loginMiniTitle > label[translate = "My_account"]').click()
-    sleep(0.5)
+    sleep(1.5)
     if driver.find_element(By.XPATH, f'//label[contains(., "{locators.full_name}")]').is_displayed():
         sleep(0.5)
         print(f'--- {locators.full_name} is found.---')
